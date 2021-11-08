@@ -26,6 +26,12 @@ bash bash/setup_conda.sh
 pip install -r requirements.txt
 ```
 
+Update the dataset directory in the file [configs/config.yaml](configs/config.yaml)
+```yaml
+# path to folder with data
+data_dir: /input/ventilator-pressure-prediction
+```
+
 Train model with chosen experiment configuration from [configs/experiment/](configs/experiment/)
 ```yaml
 python run.py experiment=cloudy ++trainer.gpus=[0] ++datamodule.fold=0 
