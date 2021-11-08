@@ -16,8 +16,8 @@ Simple LSTM model used in the https://www.kaggle.com/c/ventilator-pressure-predi
 Install dependencies
 ```yaml
 # clone project
-git clone https://github.com/YourGithubName/your-repo-name
-cd your-repo-name
+git clone https://github.com/whoknowsB/google-brain-ventilator-pressure-prediction/branches
+cd google-brain-ventilator-pressure-prediction/branches
 
 # [OPTIONAL] create conda environment
 bash bash/setup_conda.sh
