@@ -1,0 +1,16 @@
+# @package _global_
+
+# run in experiment mode with:
+# python run.py mode=exp name='my_new_experiment_23'
+
+# allows for custom naming of the experiment
+name: ???
+log_dir: logs/experiments/${name}/${datamodule.fold}
+
+# output paths for experiment mode
+hydra:
+  run:
+    dir: ${log_dir}
+  sweep:
+    dir: ${log_dir}
+    subdir: ${hydra.job.num}

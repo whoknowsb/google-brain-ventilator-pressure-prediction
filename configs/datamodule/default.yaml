@@ -1,0 +1,15 @@
+_target_: src.datamodules.datamodule.VPPDataModule
+
+data_dir: ${data_dir}
+train_file: "train.csv"
+test_file: "test.csv"
+submission_file: "test.csv"
+fold: 0
+batch_size: 32
+dataset:
+  _target_: src.datamodules.dataset.VPPDataset
+splitter:
+  _target_: sklearn.model_selection.KFold
+  n_splits: 9
+  shuffle: True
+  random_state: ${seed}

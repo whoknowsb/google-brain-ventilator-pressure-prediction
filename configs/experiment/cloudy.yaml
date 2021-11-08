@@ -1,0 +1,32 @@
+# @package _global_
+
+name: cloudy
+
+trainer:
+  max_epochs: 1024
+
+optim:
+  optimizer:
+    #lr: 3e-3 # 0 1 3 5 6 7 8 9 10
+    lr: 2e-3
+    weight_decay: 0.1
+
+  scheduler:
+    scheduler:
+      #factor: 0.6
+      factor: 0.6
+      patience: 30
+      min_lr: 1e-05
+
+datamodule:
+  splitter:
+    n_splits: 11
+  fold: 0
+  batch_size: 512
+  featurizer:
+    _target_: src.datamodules.features.simple.RC_dummies
+
+model:
+  net:
+    _target_: src.models.nets.simple.lstms
+    _args_: [9, 512]

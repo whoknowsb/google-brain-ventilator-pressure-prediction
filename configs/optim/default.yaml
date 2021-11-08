@@ -1,0 +1,52 @@
+steps_per_epoch: ${eval:"int((75450*((${datamodule.splitter.n_splits}-1)/${datamodule.splitter.n_splits})) // ${datamodule.batch_size})"}
+
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 1e-3
+  #weight_decay: 0.0
+scheduler:
+  scheduler:
+    #_target_: transformers.get_cosine_schedule_with_warmup
+    #num_warmup_steps: ${eval:"${optim.steps_per_epoch} * 5"}
+    #num_training_steps: ${eval:"${optim.steps_per_epoch} * ${trainer.max_epochs}"}
+
+    #_target_: transformers.get_cosine_with_hard_restarts_schedule_with_warmup
+    #num_warmup_steps: ${eval:"${optim.steps_per_epoch} * 5"}
+    #num_training_steps: ${eval:"${optim.steps_per_epoch} * ${trainer.max_epochs}"}
+    #num_cycles: 12
+
+    #_target_: torch.optim.lr_scheduler.OneCycleLR
+    #max_lr: ${optim.optimizer.lr}
+    #steps_per_epoch: ${eval:"int((75450*((${datamodule.splitter.n_splits}-1)/${datamodule.splitter.n_splits})) // ${datamodule.batch_size})"}
+    #epochs: ${trainer.max_epochs}
+    #div_factor: 100
+    #pct_start: ${eval:"1/${trainer.max_epochs}"}
+    #final_div_factor: 100
+    #T_0: ${eval:"int((75450*((${datamodule.splitter.n_splits}-1)/${datamodule.splitter.n_splits})) // ${datamodule.batch_size})"}
+    #eta_min: 1e-5
+
+    #_target_: torch.optim.lr_scheduler.CosineAnnealingWarmRestarts
+    #T_0: ${eval:"int((75450*((${datamodule.splitter.n_splits}-1)/${datamodule.splitter.n_splits})) // ${datamodule.batch_size})"}
+    #eta_min: 1e-5
+
+    #T_max: ${eval:"(75450*((${datamodule.splitter.n_splits}-1)/${datamodule.splitter.n_splits})) // ${datamodule.batch_size}"}
+
+    _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+    mode: min
+    factor: 0.1
+    patience: 1000
+    threshold: 0.0001
+    threshold_mode: "rel"
+    cooldown: 0
+    min_lr: 1e-04
+    eps: 1e-08
+    verbose: True
+
+    #_target_: torch.optim.lr_scheduler.MultiStepLR
+    #gamma: 0.5
+    #milestones: [3,5,10,100]
+    #verbose: True
+
+  interval: epoch
+  frequency: 1
+  monitor: valid/mae

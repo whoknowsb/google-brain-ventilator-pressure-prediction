@@ -1,0 +1,31 @@
+# @package _global_
+
+name: cloudy_pseudo
+
+trainer:
+  max_epochs: 1024
+
+optim:
+  optimizer:
+    lr: 2e-3
+    weight_decay: 0.1
+
+  scheduler:
+    scheduler:
+      factor: 0.6
+      patience: 15
+      min_lr: 1e-05
+
+datamodule:
+  splitter:
+    n_splits: 11
+  fold: 0
+  batch_size: 512
+  featurizer:
+    _target_: src.datamodules.features.simple.RC_dummies
+  pseudo: "/workspaces/ventilator-pressure-prediction/notebooks/presudo_9912.csv"
+
+model:
+  net:
+    _target_: src.models.nets.simple.lstms
+    _args_: [9, 512]
