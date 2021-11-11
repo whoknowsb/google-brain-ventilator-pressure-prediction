@@ -9,23 +9,6 @@ from sklearn.preprocessing import LabelEncoder
 from torch.utils.data import DataLoader
 
 
-def create_stratified_folds(train, splitter):
-    breath = train.groupby("breath_id").median().reset_index()
-    n_breath = len(breath.pressure)
-    n_quant = np.log2(n_breath).astype(int)
-
-    quantiles = pd.qcut(breath.pressure, n_quant)
-    label_encoder = LabelEncoder()
-    y = label_encoder.fit_transform(quantiles)
-
-    for fold, (train_idx, valid_idx) in enumerate(splitter.split(breath, y)):
-        breath.loc[valid_idx, "fold"] = fold
-    breath.fold = breath.fold.astype(int)
-    breath = breath[["breath_id", "fold"]]
-    train = train.merge(breath)
-    return train
-
-
 def create_folds(train, splitter):
     breath = train.groupby("breath_id").first().reset_index()[["breath_id"]]
     for fold, (train_idx, valid_idx) in enumerate(splitter.split(breath, breath)):
@@ -85,13 +68,6 @@ class VPPDataModule(LightningDataModule):
             train = train.append(pseudo, ignore_index=True)
             print("After pseudo:")
             print(train)
-
-        if shifter:
-            print("Creating shifts")
-            self.train_shifts = get_shifts(train)
-            self.test_shifts = get_shifts(test)
-            train = apply_shifts(train, self.train_shifts)
-            test = apply_shifts(test, self.test_shifts)
 
         if neighborizer:
             print("Creating neighbors:", "train:", train.shape, "test:", test.shape)
