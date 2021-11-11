@@ -29,6 +29,8 @@ Why? May you ask. While we were working on the network training we noted that fa
 
 In the following graphs you can clearly see the red experiments named "stakes". "stakes" converged much faster but validation MAE stopped at more than 0.150 (that is really high). All the others experiments we tried, letting the model training at higher lr were in hte end better, converging at validation MAE < 0.135. 
 
+The "cloudy" (pink) model reaches nearly 0.135 for every fold.
+
 ![Different enperiments using many schedulers](training_schedule.png)
 
 
